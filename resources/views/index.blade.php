@@ -144,26 +144,28 @@
 
         .content-header {
             background: white;
-            padding: 1.4rem 2.1rem;
+            padding: 0.9rem 1.4rem;
             border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .content-header h2 {
-            font-size: 1.75rem;
+            font-size: 1.25rem;
             color: #2c3e50;
             font-weight: 600;
-            margin-bottom: 0.35rem;
+            margin: 0;
         }
 
         .content-header .subtitle {
             color: #7f8c8d;
             font-size: 0.875rem;
+            margin: 0;
         }
 
         .content-header-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.7rem;
+            margin-left: auto;
         }
 
         .btn {
@@ -329,7 +331,7 @@
 
         .description {
             color: #2c3e50;
-            font-size: 0.9375rem;
+            font-size: 0.7375rem;
             padding: 0.7rem 0.9rem;
             background: white;
             border-left: 3px solid #3498db;
@@ -345,8 +347,8 @@
         }
 
         .tab {
-            padding: 0.45rem 0.9rem;
-            font-size: 0.875rem;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.675rem;
             font-weight: 600;
             cursor: pointer;
             background: white;
@@ -411,11 +413,11 @@
 
         .badge {
             display: inline-block;
-            padding: 0.2rem 0.45rem;
-            font-size: 0.6875rem;
+            padding: 0.15rem 0.35rem;
+            font-size: 0.5rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             color: white;
         }
 
@@ -455,24 +457,24 @@
 
         .db-table-header {
             background: #34495e;
-            padding: 0.6rem 0.7rem;
+            padding: 0.4rem 0.5rem;
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr;
-            gap: 0.7rem;
+            gap: 0.5rem;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.55rem;
             color: white;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .db-table-row {
-            padding: 0.6rem 0.7rem;
+            padding: 0.4rem 0.5rem;
             border-bottom: 1px solid #ecf0f1;
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr;
-            gap: 0.7rem;
-            font-size: 0.875rem;
+            gap: 0.5rem;
+            font-size: 0.675rem;
             transition: background 0.2s;
         }
 
@@ -596,6 +598,7 @@
                 <div class="controller-content" id="controller-{{ $index }}" style="display: {{ $index === 0 ? 'flex' : 'none' }}; flex-direction: column; height: 100%;">
                     <div class="content-header">
                         <h2>{{ $controller['name'] }}</h2>
+                        <span style="color: #bdc3c7;">|</span>
                         <div class="subtitle">{{ count($controller['routes']) }} endpoints available</div>
                         <div class="content-header-actions">
                             <button class="btn btn-export" onclick="exportPostmanCollection({{ $index }})">Export Postman Collection</button>
@@ -687,7 +690,7 @@
                                                                     <span class="badge badge-optional">No</span>
                                                                 @endif
                                                             </div>
-                                                            <div style="font-size: 0.8125rem; color: #7f8c8d;">
+                                                            <div style="font-size: 0.6125rem; color: #7f8c8d;">
                                                                 {{ $param['description'] ?? ($param['rules'] ?? '-') }}
                                                             </div>
                                                         </div>
@@ -716,7 +719,7 @@
                                                                     <span class="badge badge-optional">No</span>
                                                                 @endif
                                                             </div>
-                                                            <div style="font-size: 0.8125rem; color: #7f8c8d;">
+                                                            <div style="font-size: 0.6125rem; color: #7f8c8d;">
                                                                 {{ $field['rules'] ?? '-' }}
                                                             </div>
                                                         </div>
