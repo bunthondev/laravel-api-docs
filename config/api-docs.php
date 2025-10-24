@@ -112,5 +112,9 @@ return [
         // Show database schema in documentation
         // Set to false to hide database schema tab (useful in production)
         'show_in_docs' => env('API_DOCS_SHOW_DATABASE_SCHEMA', true),
+
+        // Use actual data from database for response examples
+        // Set to false to use generated dummy data instead
+        'use_actual_data' => env('API_DOCS_USE_ACTUAL_DATA', true),
     ],
 ];
