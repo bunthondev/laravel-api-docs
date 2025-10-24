@@ -10,11 +10,21 @@ Automatic API documentation generator for Laravel applications. Generate beautif
 
 - ✅ **Zero Configuration** - Works immediately after installation
 - ✅ **Auto Route Scanning** - Automatically discovers all your API routes
-- ✅ **Database Schema Integration** - Shows available fields from database tables
-- ✅ **Smart Parameter Detection** - Auto-detects query params from FormRequests, method signatures, and pagination
+- ✅ **Database Schema Integration** - Shows available fields from database tables with toggle option
+- ✅ **Advanced Parameter Detection** - Auto-detects query params from:
+  - FormRequests validation rules
+  - Method signatures and type hints
+  - Controller method body (`$request->has()`, `$request->input()`, etc.)
+  - Pagination patterns
+- ✅ **Real Data Examples** - Fetches actual data from database for response examples with security sanitization
+- ✅ **Smart Response Detection** - Detects custom response patterns:
+  - `Resource::collection()` for arrays
+  - `new Resource()` for single objects
+  - `sendResponse()` custom methods
 - ✅ **Laravel Resource Support** - Uses your Resource classes for accurate response examples
 - ✅ **Multiple Formats** - HTML, JSON, and OpenAPI/Swagger formats
-- ✅ **Beautiful UI** - Modern, responsive documentation interface with collapsible sections
+- ✅ **Compact UI** - Space-efficient table format with optimized spacing and typography
+- ✅ **URL Persistence** - Bookmarkable URLs with controller selection state
 - ✅ **Pagination Detection** - Automatically identifies paginated endpoints
 - ✅ **Highly Configurable** - Customize everything via config file and environment variables
 
@@ -44,10 +54,12 @@ http://your-app.test/api-docs
 
 That's it! The package automatically:
 - Scans all your API routes
-- Reads database schemas
-- Detects query parameters
-- Generates response examples
-- Creates beautiful documentation
+- Reads database schemas (PostgreSQL)
+- Detects query parameters from FormRequests AND controller code
+- Fetches real data from database for response examples
+- Detects Resource::collection() vs single Resources
+- Generates response examples with security sanitization
+- Creates beautiful, compact documentation with URL persistence
 
 ## 📖 Available Endpoints
 
@@ -58,9 +70,13 @@ GET /api-docs
 Beautiful, responsive web interface with:
 - Collapsible route sections
 - Color-coded HTTP methods
-- Parameter tables
-- Database field information
+- Compact parameter tables
+- Database field information (toggleable)
+- Real data examples with security sanitization
+- URL persistence for bookmarking
+- One-click cURL and Postman export
 - Syntax-highlighted JSON examples
+- Optimized spacing for maximum content visibility
 
 ### 2. JSON Format (Programmatic Access)
 ```
@@ -144,6 +160,10 @@ return [
         // Show database schema in documentation
         // Set to false to hide database schema tab (useful in production)
         'show_in_docs' => env('API_DOCS_SHOW_DATABASE_SCHEMA', true),
+
+        // Use actual data from database for response examples
+        // Set to false to use generated dummy data instead
+        'use_actual_data' => env('API_DOCS_USE_ACTUAL_DATA', true),
     ],
 ];
 ```
@@ -159,6 +179,7 @@ API_DOCS_VERSION="2.0.0"
 API_DOCS_BASE_URL="https://api.example.com"
 API_DOCS_ROUTE_PREFIX="docs"
 API_DOCS_SHOW_DATABASE_SCHEMA=true
+API_DOCS_USE_ACTUAL_DATA=true
 ```
 
 ### Publishing Views (Optional)
@@ -216,6 +237,40 @@ public function show(Request $request, int $id)
 }
 ```
 
+**From Controller Method Body:**
+```php
+public function index(Request $request)
+{
+    $query = Product::query();
+
+    if ($request->has('search') && $request->search) {
+        $query->where('name', 'like', "%{$request->search}%");
+    }
+
+    if ($request->input('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    if ($request->branch_ids) {
+        $query->whereIn('branch_id', $request->branch_ids);
+    }
+
+    return $query->get();
+}
+```
+
+**Automatically detects:**
+- `search` (string) - from `$request->has('search')`
+- `category_id` (integer) - from `$request->input('category_id')`
+- `branch_ids` (array) - from `$request->branch_ids` (smart type detection)
+
+**Supported patterns:**
+- `$request->has('param')`
+- `$request->input('param')`
+- `$request->get('param')`
+- `$request->query('param')`
+- `$request->param` (magic property access)
+
 **Pagination Auto-Detection:**
 ```php
 public function index()
@@ -249,8 +304,30 @@ class ProductController extends Controller
 
 ### 4. Response Examples
 
-Uses your Laravel Resources for accurate examples:
+**Detects Collection vs Single Resource:**
+```php
+// Collection - returns array
+public function index()
+{
+    return $this->sendResponse(
+        RoleResource::collection($roles),
+        'Roles retrieved successfully'
+    );
+}
+// Generates: { "data": [{...}, {...}] }
 
+// Single Resource - returns object
+public function show($id)
+{
+    return $this->sendResponse(
+        new UserResource($user),
+        'User retrieved successfully'
+    );
+}
+// Generates: { "data": {...} }
+```
+
+**Uses Real Database Data:**
 ```php
 class ProductResource extends JsonResource
 {
@@ -268,6 +345,11 @@ class ProductResource extends JsonResource
     }
 }
 ```
+
+The package automatically:
+- Fetches the first record from the database table
+- Maps it to your Resource structure
+- Sanitizes sensitive fields (passwords, tokens, API keys)
 
 **Generated Response:**
 ```json
@@ -346,6 +428,40 @@ API_DOCS_ROUTE_PREFIX=documentation
 
 Access documentation at: `http://your-app.test/documentation`
 
+## 🎨 UI Features
+
+### Compact Table Format
+Parameters are displayed in space-efficient tables instead of card grids:
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| search | string | No | Search by name |
+| category_id | integer | No | Filter by category |
+
+### URL Persistence
+When you select a controller, the URL updates automatically:
+```
+http://your-app.test/api-docs?controller=ProductController
+```
+
+Benefits:
+- Bookmark specific controllers
+- Share direct links with your team
+- Browser back/forward navigation works
+- Refresh page maintains your selection
+
+### Optimized Spacing
+- Compact typography (10px base font)
+- Reduced padding throughout
+- Smaller badges and buttons
+- More content visible on screen
+
+### Copy to Clipboard
+One-click copy for:
+- cURL commands with all parameters
+- Postman collection export
+- Response examples
+
 ## 🔒 Security
 
 ### Protect Documentation in Production
@@ -369,6 +485,35 @@ API_DOCS_SHOW_DATABASE_SCHEMA=false
 ```
 
 This keeps the documentation accessible but hides sensitive database structure information.
+
+**Disable Real Data Examples in Production:**
+```env
+# .env.production
+API_DOCS_USE_ACTUAL_DATA=false
+```
+
+This prevents exposing real database records in documentation. The package will use generated dummy data instead.
+
+**Automatic Security Sanitization:**
+
+When using real data, sensitive fields are automatically hidden:
+```php
+// Original database value
+'password' => '$2y$10$92IXUNpkjO0rOQ5byMi...',
+'api_key' => 'sk_live_51H7...',
+'access_token' => 'eyJhbGciOiJIUzI1NiIsInR...',
+
+// In documentation
+'password' => '***HIDDEN***',
+'api_key' => '***HIDDEN***',
+'access_token' => '***HIDDEN***',
+```
+
+Protected field patterns:
+- `password`, `secret`, `token`
+- `api_key`, `private_key`
+- `access_token`, `refresh_token`
+- `credit_card`, `ssn`, `salt`
 
 **Conditional Enabling:**
 ```php
@@ -503,8 +648,10 @@ class StoreProductRequest extends FormRequest
 
 Benefits:
 - Automatic parameter documentation
-- Type detection
-- Validation rules displayed
+- Type detection (string, integer, array, etc.)
+- Validation rules displayed in Request Body tab
+
+**Note:** Even without FormRequests, the package detects parameters from your controller code using `$request->has()`, `$request->input()`, etc.
 
 ### 2. Use Laravel Resources
 
@@ -523,9 +670,22 @@ class ProductResource extends JsonResource
 ```
 
 Benefits:
-- Accurate response examples
+- Accurate response examples with real database data
 - Proper data transformation
 - Consistent API responses
+- Automatic detection of array vs single object responses
+
+**Pro Tip:** Use `Resource::collection()` for list endpoints and `new Resource()` for single items. The package automatically generates correct response structures.
+
+```php
+// List endpoint - returns array
+return RoleResource::collection($roles);
+// Documentation shows: { "data": [{...}, {...}] }
+
+// Single endpoint - returns object
+return new RoleResource($role);
+// Documentation shows: { "data": {...} }
+```
 
 ### 3. Add Meaningful DocBlocks
 
