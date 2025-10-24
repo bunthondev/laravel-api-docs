@@ -638,7 +638,7 @@
                                             @if (isset($route['body_fields']) && count($route['body_fields']) > 0)
                                                 <div class="tab" onclick="switchTab(this, 'body')">Request Body</div>
                                             @endif
-                                            @if (isset($route['table_schema']['columns']) && count($route['table_schema']['columns']) > 0)
+                                            @if (config('api-docs.database.show_in_docs', true) && isset($route['table_schema']['columns']) && count($route['table_schema']['columns']) > 0)
                                                 <div class="tab" onclick="switchTab(this, 'db')">Database Schema</div>
                                             @endif
                                             @if (isset($route['response_example']))
@@ -725,7 +725,7 @@
                                             </div>
                                         @endif
 
-                                        @if (isset($route['table_schema']['columns']) && count($route['table_schema']['columns']) > 0)
+                                        @if (config('api-docs.database.show_in_docs', true) && isset($route['table_schema']['columns']) && count($route['table_schema']['columns']) > 0)
                                             <div class="tab-content" data-tab="db">
                                                 <div class="db-table">
                                                     <div class="db-table-header">
@@ -769,8 +769,10 @@
     </div>
 
     <script>
+        const controllers = @json(array_column($documentation['controllers'], 'name'));
+
         // Select Controller
-        function selectController(index) {
+        function selectController(index, updateUrl = true) {
             // Update sidebar
             document.querySelectorAll('.controller-item').forEach(item => {
                 item.classList.remove('active');
@@ -782,7 +784,40 @@
                 content.style.display = 'none';
             });
             document.getElementById(`controller-${index}`).style.display = 'flex';
+
+            // Update URL without reloading page
+            if (updateUrl) {
+                const controllerName = controllers[index];
+                const newUrl = `${window.location.pathname}?controller=${encodeURIComponent(controllerName)}`;
+                window.history.pushState({ controllerIndex: index }, '', newUrl);
+            }
         }
+
+        // Initialize on page load
+        function initializeFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const controllerParam = urlParams.get('controller');
+
+            if (controllerParam) {
+                // Find controller index by name
+                const index = controllers.findIndex(name => name === controllerParam);
+                if (index !== -1) {
+                    selectController(index, false);
+                }
+            }
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.controllerIndex !== undefined) {
+                selectController(event.state.controllerIndex, false);
+            } else {
+                initializeFromUrl();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeFromUrl);
 
         // Toggle Route Details
         function toggleRoute(element) {

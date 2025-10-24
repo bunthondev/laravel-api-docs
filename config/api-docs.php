@@ -108,5 +108,9 @@ return [
     'database' => [
         // Schema name for PostgreSQL (use 'public' for default)
         'schema' => 'public',
+
+        // Show database schema in documentation
+        // Set to false to hide database schema tab (useful in production)
+        'show_in_docs' => env('API_DOCS_SHOW_DATABASE_SCHEMA', true),
     ],
 ];

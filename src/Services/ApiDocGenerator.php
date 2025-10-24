@@ -25,10 +25,12 @@ class ApiDocGenerator
         // Enrich routes with additional data
         foreach ($routes as &$controller) {
             foreach ($controller['routes'] as &$route) {
-                // Get model table schema
-                $tableName = $this->schemaReader->getModelTableFromController($controller['full_name']);
-                if ($tableName) {
-                    $route['table_schema'] = $this->schemaReader->getTableSchema($tableName);
+                // Get model table schema (only if enabled in config)
+                if (config('api-docs.database.show_in_docs', true)) {
+                    $tableName = $this->schemaReader->getModelTableFromController($controller['full_name']);
+                    if ($tableName) {
+                        $route['table_schema'] = $this->schemaReader->getTableSchema($tableName);
+                    }
                 }
 
                 // Detect all parameters

@@ -140,6 +140,10 @@ return [
     'database' => [
         // Schema name for PostgreSQL
         'schema' => 'public',
+
+        // Show database schema in documentation
+        // Set to false to hide database schema tab (useful in production)
+        'show_in_docs' => env('API_DOCS_SHOW_DATABASE_SCHEMA', true),
     ],
 ];
 ```
@@ -154,6 +158,7 @@ API_DOCS_TITLE="My Awesome API"
 API_DOCS_VERSION="2.0.0"
 API_DOCS_BASE_URL="https://api.example.com"
 API_DOCS_ROUTE_PREFIX="docs"
+API_DOCS_SHOW_DATABASE_SCHEMA=true
 ```
 
 ### Publishing Views (Optional)
@@ -356,6 +361,14 @@ Access documentation at: `http://your-app.test/documentation`
 # .env.production
 API_DOCS_ENABLED=false
 ```
+
+**Hide Database Schema in Production:**
+```env
+# .env.production
+API_DOCS_SHOW_DATABASE_SCHEMA=false
+```
+
+This keeps the documentation accessible but hides sensitive database structure information.
 
 **Conditional Enabling:**
 ```php
