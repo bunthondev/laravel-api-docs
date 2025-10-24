@@ -554,7 +554,7 @@
 
             .db-table-header,
             .db-table-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
             }
         }
     </style>
@@ -669,22 +669,26 @@
                                         @if (isset($route['query_params']) && count($route['query_params']) > 0)
                                             <div class="tab-content {{ !isset($route['parameters']) || count($route['parameters']) === 0 ? 'active' : '' }}"
                                                  data-tab="query">
-                                                <div class="params-grid">
+                                                <div class="db-table">
+                                                    <div class="db-table-header" style="grid-template-columns: 2fr 1fr 1fr 3fr;">
+                                                        <div>Parameter</div>
+                                                        <div>Type</div>
+                                                        <div>Required</div>
+                                                        <div>Description</div>
+                                                    </div>
                                                     @foreach ($route['query_params'] as $param)
-                                                        <div class="param-item">
-                                                            <div class="param-name">
-                                                                {{ $param['name'] }}
-                                                                @if (isset($param['source']))
-                                                                    <span class="source-badge">{{ $param['source'] }}</span>
+                                                        <div class="db-table-row" style="grid-template-columns: 2fr 1fr 1fr 3fr;">
+                                                            <div class="db-col-name">{{ $param['name'] }}</div>
+                                                            <div class="db-col-type">{{ $param['type'] }}</div>
+                                                            <div>
+                                                                @if ($param['required'] ?? false)
+                                                                    <span class="badge badge-required">Yes</span>
+                                                                @else
+                                                                    <span class="badge badge-optional">No</span>
                                                                 @endif
                                                             </div>
-                                                            <div class="param-meta">
-                                                                @if ($param['required'] ?? false)
-                                                                    <span class="badge badge-required">Required</span>
-                                                                @else
-                                                                    <span class="badge badge-optional">Optional</span>
-                                                                @endif
-                                                                <span class="param-type">{{ $param['type'] }}</span>
+                                                            <div style="font-size: 0.8125rem; color: #7f8c8d;">
+                                                                {{ $param['description'] ?? ($param['rules'] ?? '-') }}
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -694,22 +698,26 @@
 
                                         @if (isset($route['body_fields']) && count($route['body_fields']) > 0)
                                             <div class="tab-content" data-tab="body">
-                                                <div class="params-grid">
+                                                <div class="db-table">
+                                                    <div class="db-table-header" style="grid-template-columns: 2fr 1fr 1fr 3fr;">
+                                                        <div>Field</div>
+                                                        <div>Type</div>
+                                                        <div>Required</div>
+                                                        <div>Validation Rules</div>
+                                                    </div>
                                                     @foreach ($route['body_fields'] as $field)
-                                                        <div class="param-item">
-                                                            <div class="param-name">
-                                                                {{ $field['name'] }}
-                                                                @if (isset($field['source']))
-                                                                    <span class="source-badge">{{ $field['source'] }}</span>
+                                                        <div class="db-table-row" style="grid-template-columns: 2fr 1fr 1fr 3fr;">
+                                                            <div class="db-col-name">{{ $field['name'] }}</div>
+                                                            <div class="db-col-type">{{ $field['type'] }}</div>
+                                                            <div>
+                                                                @if ($field['required'] ?? false)
+                                                                    <span class="badge badge-required">Yes</span>
+                                                                @else
+                                                                    <span class="badge badge-optional">No</span>
                                                                 @endif
                                                             </div>
-                                                            <div class="param-meta">
-                                                                @if ($field['required'] ?? false)
-                                                                    <span class="badge badge-required">Required</span>
-                                                                @else
-                                                                    <span class="badge badge-optional">Optional</span>
-                                                                @endif
-                                                                <span class="param-type">{{ $field['type'] }}</span>
+                                                            <div style="font-size: 0.8125rem; color: #7f8c8d;">
+                                                                {{ $field['rules'] ?? '-' }}
                                                             </div>
                                                         </div>
                                                     @endforeach

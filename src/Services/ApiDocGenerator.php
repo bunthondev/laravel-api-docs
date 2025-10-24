@@ -31,17 +31,26 @@ class ApiDocGenerator
                     $route['table_schema'] = $this->schemaReader->getTableSchema($tableName);
                 }
 
-                // Detect query parameters
-                $route['query_params'] = $this->queryParamDetector->detectQueryParams(
+                // Detect all parameters
+                $allParams = $this->queryParamDetector->detectQueryParams(
                     $controller['full_name'],
                     $route['method']
                 );
 
-                // Add request body fields for POST/PUT/PATCH
-                if (in_array('POST', $route['methods']) ||
-                    in_array('PUT', $route['methods']) ||
-                    in_array('PATCH', $route['methods'])) {
-                    $route['body_fields'] = $this->getBodyFields($route);
+                // Separate query params and body fields based on HTTP method
+                $isModifyingRequest = in_array('POST', $route['methods']) ||
+                                     in_array('PUT', $route['methods']) ||
+                                     in_array('PATCH', $route['methods']);
+
+                if ($isModifyingRequest) {
+                    // For POST/PUT/PATCH: form_request goes to body, others to query params
+                    $route['query_params'] = array_values(array_filter($allParams, function($param) {
+                        return in_array($param['source'] ?? '', ['request_usage', 'pagination']);
+                    }));
+                    $route['body_fields'] = $this->getBodyFields($allParams, $route);
+                } else {
+                    // For GET/DELETE: all params are query params
+                    $route['query_params'] = $allParams;
                 }
 
                 // Add response example
@@ -61,12 +70,12 @@ class ApiDocGenerator
     /**
      * Get body fields for POST/PUT/PATCH requests
      */
-    private function getBodyFields(array $route): array
+    private function getBodyFields(array $allParams, array $route): array
     {
         $bodyFields = [];
 
-        // Get fields from query params (which includes FormRequest validation)
-        foreach ($route['query_params'] as $param) {
+        // Get fields from detected params (FormRequest validation)
+        foreach ($allParams as $param) {
             if ($param['source'] === 'form_request') {
                 $bodyFields[] = $param;
             }
@@ -83,9 +92,9 @@ class ApiDocGenerator
                 $bodyFields[] = [
                     'name' => $column['name'],
                     'type' => $column['type'],
-                    'required' => $column['required'],
-                    'nullable' => $column['nullable'],
-                    'max_length' => $column['max_length'],
+                    'required' => $column['required'] ?? false,
+                    'nullable' => $column['nullable'] ?? false,
+                    'max_length' => $column['max_length'] ?? null,
                     'source' => 'table_schema',
                 ];
             }
