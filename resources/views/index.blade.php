@@ -17,7 +17,7 @@
             line-height: 1.6;
             color: #2c3e50;
             background: #ecf0f1;
-            font-size: 14px;
+            font-size: 10px;
             height: 100vh;
             overflow: hidden;
         }
@@ -30,7 +30,7 @@
 
         /* Left Sidebar */
         .sidebar {
-            width: 280px;
+            width: 250px;
             background: #34495e;
             display: flex;
             flex-direction: column;
@@ -38,7 +38,7 @@
         }
 
         .sidebar-header {
-            padding: 2rem 1.5rem;
+            padding: 1.4rem 1rem;
             background: #2c3e50;
             color: white;
         }
@@ -46,7 +46,7 @@
         .sidebar-header h1 {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .sidebar-header .meta {
@@ -54,19 +54,19 @@
             opacity: 0.8;
             display: flex;
             flex-direction: column;
-            gap: 0.25rem;
+            gap: 0.15rem;
         }
 
         .sidebar-search {
-            padding: 1rem 1.5rem;
+            padding: 0.7rem 1rem;
             background: #2c3e50;
         }
 
         .search-input {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.5rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             font-size: 0.875rem;
             background: #34495e;
             color: white;
@@ -84,14 +84,14 @@
         .controllers-list {
             flex: 1;
             overflow-y: auto;
-            padding: 0.5rem;
+            padding: 0.35rem;
         }
 
         .controller-item {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
             cursor: pointer;
             background: #2c3e50;
-            border-left: 4px solid transparent;
+            border-left: 3px solid transparent;
             transition: all 0.2s;
         }
 
@@ -106,7 +106,7 @@
         }
 
         .controller-item-inner {
-            padding: 1rem 1.25rem;
+            padding: 0.7rem 0.9rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -122,7 +122,7 @@
             font-size: 0.75rem;
             background: #34495e;
             color: #bdc3c7;
-            padding: 0.25rem 0.625rem;
+            padding: 0.2rem 0.45rem;
             border-radius: 3px;
             font-weight: 600;
         }
@@ -144,15 +144,15 @@
 
         .content-header {
             background: white;
-            padding: 2rem 3rem;
-            border-bottom: 3px solid #3498db;
+            padding: 1.4rem 2.1rem;
+            border-bottom: 2px solid #3498db;
         }
 
         .content-header h2 {
             font-size: 1.75rem;
             color: #2c3e50;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .content-header .subtitle {
@@ -162,12 +162,12 @@
 
         .content-header-actions {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
+            gap: 0.5rem;
+            margin-top: 0.7rem;
         }
 
         .btn {
-            padding: 0.625rem 1.25rem;
+            padding: 0.45rem 0.9rem;
             font-size: 0.875rem;
             font-weight: 600;
             cursor: pointer;
@@ -193,12 +193,12 @@
 
         .action-buttons {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.35rem;
             margin-left: auto;
         }
 
         .btn-copy {
-            padding: 0.5rem 1rem;
+            padding: 0.35rem 0.7rem;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
@@ -223,22 +223,22 @@
         .routes-container {
             flex: 1;
             overflow-y: auto;
-            padding: 2rem 3rem;
+            padding: 1.4rem 2.1rem;
         }
 
         /* Route Card */
         .route-card {
             background: white;
-            margin-bottom: 1rem;
-            border-left: 4px solid #3498db;
+            margin-bottom: 0.7rem;
+            border-left: 3px solid #3498db;
         }
 
         .route-header {
-            padding: 1.25rem 1.5rem;
+            padding: 0.9rem 1.05rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.7rem;
             transition: background 0.2s;
         }
 
@@ -253,11 +253,11 @@
 
         .route-methods {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.35rem;
         }
 
         .method-badge {
-            padding: 0.375rem 0.75rem;
+            padding: 0.25rem 0.5rem;
             font-weight: 600;
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -318,34 +318,34 @@
 
         .route-details.active {
             grid-template-rows: 1fr;
-            padding: 2rem 0;
+            padding: 1.4rem 0;
             border-top: 2px solid #bdc3c7;
         }
 
         .route-details-inner {
             overflow: hidden;
-            padding: 0 2rem;
+            padding: 0 1.4rem;
         }
 
         .description {
             color: #2c3e50;
             font-size: 0.9375rem;
-            padding: 1rem 1.25rem;
+            padding: 0.7rem 0.9rem;
             background: white;
-            border-left: 4px solid #3498db;
-            margin-bottom: 1.5rem;
+            border-left: 3px solid #3498db;
+            margin-bottom: 1rem;
         }
 
         /* Tabs */
         .tab-group {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
 
         .tab {
-            padding: 0.625rem 1.25rem;
+            padding: 0.45rem 0.9rem;
             font-size: 0.875rem;
             font-weight: 600;
             cursor: pointer;
@@ -378,13 +378,13 @@
         .params-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
+            gap: 0.7rem;
         }
 
         .param-item {
             background: white;
-            padding: 1rem 1.25rem;
-            border-left: 3px solid #3498db;
+            padding: 0.7rem 0.9rem;
+            border-left: 2px solid #3498db;
         }
 
         .param-name {
@@ -392,12 +392,12 @@
             color: #2c3e50;
             font-weight: 700;
             font-size: 0.875rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .param-meta {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.35rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -411,7 +411,7 @@
 
         .badge {
             display: inline-block;
-            padding: 0.25rem 0.625rem;
+            padding: 0.2rem 0.45rem;
             font-size: 0.6875rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -429,7 +429,7 @@
 
         .source-badge {
             font-size: 0.6875rem;
-            padding: 0.25rem 0.5rem;
+            padding: 0.2rem 0.35rem;
             background: #ecf0f1;
             color: #7f8c8d;
             font-weight: 600;
@@ -439,7 +439,7 @@
         .code-block {
             background: #2c3e50;
             color: #ecf0f1;
-            padding: 1.5rem;
+            padding: 1rem;
             overflow-x: auto;
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
             font-size: 0.8125rem;
@@ -455,10 +455,10 @@
 
         .db-table-header {
             background: #34495e;
-            padding: 0.875rem 1rem;
+            padding: 0.6rem 0.7rem;
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr;
-            gap: 1rem;
+            gap: 0.7rem;
             font-weight: 700;
             font-size: 0.75rem;
             color: white;
@@ -467,11 +467,11 @@
         }
 
         .db-table-row {
-            padding: 0.875rem 1rem;
+            padding: 0.6rem 0.7rem;
             border-bottom: 1px solid #ecf0f1;
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr;
-            gap: 1rem;
+            gap: 0.7rem;
             font-size: 0.875rem;
             transition: background 0.2s;
         }
@@ -499,27 +499,27 @@
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 2.8rem 1.4rem;
             color: #7f8c8d;
         }
 
         .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 0.7rem;
             opacity: 0.5;
         }
 
         .empty-state-title {
             font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
             color: #2c3e50;
         }
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -538,7 +538,7 @@
         @media (max-width: 1024px) {
             .sidebar {
                 position: absolute;
-                left: -280px;
+                left: -250px;
                 height: 100%;
                 transition: left 0.3s;
                 z-index: 100;
