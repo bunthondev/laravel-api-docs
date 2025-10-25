@@ -106,7 +106,9 @@ return [
     |
     */
     'database' => [
-        // Schema name for PostgreSQL (use 'public' for default)
+        // Schema name(s) for PostgreSQL (use 'public' for default)
+        // Can be a string for single schema or array for multiple schemas
+        // Examples: 'public' or ['public', 'tenant_1', 'tenant_2']
         'schema' => 'public',
 
         // Show database schema in documentation

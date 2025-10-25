@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Schema;
 class SchemaReader
 {
     /**
+     * Get configured database schemas as array
+     */
+    private function getSchemas(): array
+    {
+        $schema = config('api-docs.database.schema', 'public');
+
+        // Support both string and array configuration
+        return is_array($schema) ? $schema : [$schema];
+    }
+
+    /**
      * Get table schema information
      */
     public function getTableSchema(string $tableName): array
@@ -33,7 +44,8 @@ class SchemaReader
      */
     private function getColumns(string $tableName): array
     {
-        $schema = config('api-docs.database.schema', 'public');
+        $schemas = $this->getSchemas();
+        $placeholders = implode(',', array_fill(0, count($schemas), '?'));
 
         $columns = DB::select("
             SELECT
@@ -46,9 +58,9 @@ class SchemaReader
                 numeric_scale
             FROM information_schema.columns
             WHERE table_name = ?
-            AND table_schema = ?
+            AND table_schema IN ($placeholders)
             ORDER BY ordinal_position
-        ", [$tableName, $schema]);
+        ", array_merge([$tableName], $schemas));
 
         return array_map(function ($column) {
             return [
@@ -69,14 +81,17 @@ class SchemaReader
      */
     private function getIndexes(string $tableName): array
     {
+        $schemas = $this->getSchemas();
+        $placeholders = implode(',', array_fill(0, count($schemas), '?'));
+
         $indexes = DB::select("
             SELECT
                 indexname as name,
                 indexdef as definition
             FROM pg_indexes
             WHERE tablename = ?
-            AND schemaname = 'public'
-        ", [$tableName]);
+            AND schemaname IN ($placeholders)
+        ", array_merge([$tableName], $schemas));
 
         return array_map(function ($index) {
             return [
@@ -92,6 +107,9 @@ class SchemaReader
      */
     private function getForeignKeys(string $tableName): array
     {
+        $schemas = $this->getSchemas();
+        $placeholders = implode(',', array_fill(0, count($schemas), '?'));
+
         $foreignKeys = DB::select("
             SELECT
                 kcu.column_name,
@@ -106,7 +124,8 @@ class SchemaReader
                 AND ccu.table_schema = tc.table_schema
             WHERE tc.constraint_type = 'FOREIGN KEY'
                 AND tc.table_name = ?
-        ", [$tableName]);
+                AND tc.table_schema IN ($placeholders)
+        ", array_merge([$tableName], $schemas));
 
         return array_map(function ($fk) {
             return [
