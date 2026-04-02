@@ -23,20 +23,24 @@ class SchemaReader
      */
     public function getTableSchema(string $tableName): array
     {
-        if (!Schema::hasTable($tableName)) {
+        try {
+            if (!Schema::hasTable($tableName)) {
+                return [];
+            }
+
+            $columns = $this->getColumns($tableName);
+            $indexes = $this->getIndexes($tableName);
+            $foreignKeys = $this->getForeignKeys($tableName);
+
+            return [
+                'table' => $tableName,
+                'columns' => $columns,
+                'indexes' => $indexes,
+                'foreign_keys' => $foreignKeys,
+            ];
+        } catch (\Throwable $e) {
             return [];
         }
-
-        $columns = $this->getColumns($tableName);
-        $indexes = $this->getIndexes($tableName);
-        $foreignKeys = $this->getForeignKeys($tableName);
-
-        return [
-            'table' => $tableName,
-            'columns' => $columns,
-            'indexes' => $indexes,
-            'foreign_keys' => $foreignKeys,
-        ];
     }
 
     /**

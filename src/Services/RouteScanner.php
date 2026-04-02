@@ -76,7 +76,14 @@ class RouteScanner
             return null;
         }
 
-        [$controller, $method] = explode('@', $action['controller']);
+        $controllerAction = $action['controller'];
+
+        if (str_contains($controllerAction, '@')) {
+            [$controller, $method] = explode('@', $controllerAction, 2);
+        } else {
+            $controller = $controllerAction;
+            $method = '__invoke';
+        }
 
         return [
             'uri' => $route->uri(),
